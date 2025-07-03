@@ -30,10 +30,13 @@ export class TrieTree {
     }
   }
 
-  public search(allowedChars: string[], wordLength: number): string[] {
+  public search(usedChars: string[], remainingChars: string[]): string[] {
     const result: string[] = [];
 
-    this.walk(this.root, [], result, allowedChars, wordLength);
+    for (const char of remainingChars) {
+      const allowedChars = [...usedChars, char];
+      this.walk(this.root, [], result, allowedChars, usedChars.length + 1);
+    }
 
     return result;
   }
@@ -46,7 +49,7 @@ export class TrieTree {
     wordLength: number
   ): void {
     // Base case
-    if (!node || path.length > wordLength) {
+    if (!node || path.length >= wordLength) {
       return;
     }
 
@@ -55,7 +58,10 @@ export class TrieTree {
       return;
     }
 
-    const newAllowedChars = allowedChars.toSpliced(allowedCharIndex, 1);
+    let newAllowedChars = allowedChars;
+    if (allowedCharIndex !== -1) {
+      newAllowedChars = allowedChars.toSpliced(allowedCharIndex, 1);
+    }
 
     // Pre recurse
     if (node.character !== "") {
