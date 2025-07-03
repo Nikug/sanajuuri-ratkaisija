@@ -4,12 +4,14 @@
   "main": "main.ts",
   "type": "module",
   "scripts": {
-    "start": "node --import=tsx main.ts"
+    "start": "node --import=tsx main.ts",
+    "parse": "node --import=tsx scripts/parse.ts"
   },
   "author": "",
   "license": "ISC",
   "description": "",
   "devDependencies": {
+    "@types/node": "^24.0.10",
     "prettier": "^3.6.2",
     "tsx": "^4.20.3",
     "typescript": "^5.8.3"
