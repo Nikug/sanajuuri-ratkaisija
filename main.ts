@@ -3,6 +3,7 @@ import { TrieTree } from "tree";
 
 interface Solution {
   words: string[];
+  usedChars: string[];
   remainingChars: string[];
 }
 
@@ -16,26 +17,22 @@ const loadWords = (): TrieTree => {
 };
 
 const solve = (tree: TrieTree, usedChars: string[], remainingChars: string[]) => {
-  const stack: Solution[] = [{ words: [usedChars.join("")], remainingChars }];
   const solutions: Solution[] = [];
   const allChars = [...usedChars, ...remainingChars];
+  const stack: Solution[] = [{ words: [usedChars.join("")], usedChars, remainingChars }];
 
   while (stack.length > 0) {
     const currentSolution = stack.pop()!;
-    const words = tree.search(
-      currentSolution.words.at(-1)!.split(""),
-      currentSolution.remainingChars
-    );
+    const words = tree.search(currentSolution.usedChars, currentSolution.remainingChars);
 
     for (const word of words) {
-      // TODO: find a better way to get new remaining chars
       const newRemainingChars = [...allChars];
-      word
-        .split("")
-        .forEach((char) => newRemainingChars.splice(newRemainingChars.indexOf(char), 1));
+      const newUsedChars = word.split("");
+      newUsedChars.forEach((char) => newRemainingChars.splice(newRemainingChars.indexOf(char), 1));
 
       const nextSolution = {
         words: [...currentSolution.words, word],
+        usedChars: newUsedChars,
         remainingChars: newRemainingChars,
       };
 
