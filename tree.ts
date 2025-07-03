@@ -33,8 +33,14 @@ export class TrieTree {
   public search(usedChars: string[], remainingChars: string[]): string[] {
     const result: string[] = [];
 
+    const testedChars = new Set<string>();
+
     for (const char of remainingChars) {
+      if (testedChars.has(char)) continue;
+
       const allowedChars = [...usedChars, char];
+      testedChars.add(char);
+
       this.walk(this.root, [], result, allowedChars, usedChars.length + 1);
     }
 
