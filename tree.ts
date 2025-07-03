@@ -21,10 +21,15 @@ export class TrieTree {
     for (let i = 0; i < word.length; i++) {
       const char = word[i];
       const index = characters.indexOf(char);
+      const isWord = i === word.length - 1;
+
       if (node.nodes[index]) {
         node = node.nodes[index];
+        if (isWord) {
+          node.isWord = true;
+        }
       } else {
-        node.nodes[index] = { character: char, nodes: [], isWord: i === word.length - 1 };
+        node.nodes[index] = { character: char, nodes: [], isWord };
         node = node.nodes[index];
       }
     }
