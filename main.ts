@@ -17,7 +17,9 @@ const main = () => {
   console.timeEnd("Load");
 
   console.time("Word find");
-  const foundWords = tree.search("test", 7);
+
+  const allowedChars = "satoaesl".split("");
+  const foundWords = tree.search(allowedChars, 4);
   console.timeEnd("Word find");
 
   console.log(foundWords);
