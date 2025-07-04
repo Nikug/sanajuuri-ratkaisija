@@ -1,14 +1,20 @@
-import { createSignal, onMount, type Component } from "solid-js";
+import { createSignal, onMount, Show, type Component } from "solid-js";
 import { TextInput } from "./components/TextInput";
 import { TrieTree } from "./utils/tree";
 import wordList from "./assets/words.json";
 import { Button } from "./components/Button";
-import { listSubtract, solve } from "./utils/solver";
+import { listSubtract, Solution, solve } from "./utils/solver";
+import { Solutions } from "./Solutions";
 
 const App: Component = () => {
   const [tree, setTree] = createSignal<TrieTree>(new TrieTree());
   const [firstWord, setFirstWord] = createSignal<string>("");
   const [allCharacters, setAllCharacters] = createSignal<string>("");
+  const [solutions, setSolutions] = createSignal<Solution[]>([]);
+  const [solved, setSolved] = createSignal<boolean>(false);
+
+  const [firstWordError, setFirstWordError] = createSignal<string>("");
+  const [allCharactersError, setAllCharactersError] = createSignal<string>("");
 
   onMount(() => {
     const newTree = new TrieTree();
@@ -18,16 +24,38 @@ const App: Component = () => {
 
   const handleSolve = (event: SubmitEvent) => {
     event.preventDefault();
+    setAllCharactersError("");
+    setFirstWordError("");
 
-    const firstCharacters = firstWord().split("");
-    const remainingCharacters = listSubtract(allCharacters().split(""), firstCharacters);
+    const word = firstWord();
+    const characters = allCharacters();
+
+    if (word.length !== 3) {
+      setFirstWordError("Tarvitaan 3 kirjainta");
+    }
+
+    if (characters.length !== 8) {
+      setAllCharactersError("Tarvitaan 8 kirjainta");
+    }
+
+    if (allCharactersError() || firstWordError()) return;
+
+    const firstCharacters = word.split("");
+    const remainingCharacters = listSubtract(characters.split(""), firstCharacters);
+
+    if (remainingCharacters.length !== 5) {
+      setAllCharactersError("Ensimmäinen sana ei sisälly kaikkiin kirjaimiin");
+      return;
+    }
+
     const result = solve(tree(), firstCharacters, remainingCharacters);
-    console.log(result);
+    setSolutions(result);
+    setSolved(true);
   };
 
   return (
-    <div class="bg-violet-50 w-screen h-screen flex justify-center">
-      <div class="w-[800px] pt-4 pb-16">
+    <div class="bg-violet-50 w-screen min-h-screen flex justify-center">
+      <div class="w-[800px] pt-8 pb-16 px-2">
         <h1 class="font-black text-4xl mb-8">Sanajuuri ratkaisija</h1>
         <form onSubmit={handleSolve}>
           <div class="flex flex-col gap-2">
@@ -39,6 +67,9 @@ const App: Component = () => {
                 value={firstWord()}
                 onChange={(e) => setFirstWord(e.target.value)}
               />
+              <Show when={firstWordError()}>
+                <p class="text-red-600 text-sm">{firstWordError()}</p>
+              </Show>
             </div>
             <div class="flex flex-col gap-1">
               <label for="all-characters">Kaikki kirjaimet</label>
@@ -48,12 +79,20 @@ const App: Component = () => {
                 value={allCharacters()}
                 onChange={(e) => setAllCharacters(e.target.value)}
               />
+              <Show when={allCharactersError()}>
+                <p class="text-red-600 text-sm">{allCharactersError()}</p>
+              </Show>
             </div>
           </div>
           <Button class="mt-4" type="submit">
             Ratkaise
           </Button>
         </form>
+        <div class="mt-8">
+          <Show when={solved()}>
+            <Solutions solutions={solutions()} />
+          </Show>
+        </div>
       </div>
     </div>
   );
