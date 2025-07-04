@@ -63,7 +63,7 @@ export const DynamicSolution: Component<Props> = (props) => {
         <For each={props.groupedSolutions}>
           {(group, i) => (
             <div class="flex gap-2">
-              <p class="mt-1 whitespace-nowrap">{i() + 1}. taso</p>
+              <p class="mt-1 whitespace-nowrap">{i() + 1}. sana</p>
               <ToggleGroup
                 values={getFilteredValues(group, i())}
                 selected={selectedWords()[i()] ?? null}
