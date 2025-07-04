@@ -5,12 +5,14 @@ import wordList from "./assets/words.json";
 import { Button } from "./components/Button";
 import { listSubtract, Solution, solve } from "./utils/solver";
 import { Solutions } from "./Solutions";
+import { groupSolutions, SolutionGroup } from "./utils/grouping";
 
 const App: Component = () => {
   const [tree, setTree] = createSignal<TrieTree>(new TrieTree());
   const [firstWord, setFirstWord] = createSignal<string>("");
   const [allCharacters, setAllCharacters] = createSignal<string>("");
   const [solutions, setSolutions] = createSignal<Solution[]>([]);
+  const [groupedSolutions, setGroupedSolutions] = createSignal<SolutionGroup>([]);
   const [solved, setSolved] = createSignal<boolean>(false);
 
   const [firstWordError, setFirstWordError] = createSignal<string>("");
@@ -50,6 +52,7 @@ const App: Component = () => {
 
     const result = solve(tree(), firstCharacters, remainingCharacters);
     setSolutions(result);
+    setGroupedSolutions(groupSolutions(result));
     setSolved(true);
   };
 
@@ -90,7 +93,7 @@ const App: Component = () => {
         </form>
         <div class="mt-8">
           <Show when={solved()}>
-            <Solutions solutions={solutions()} />
+            <Solutions solutions={solutions()} groupedSolutions={groupedSolutions()} />
           </Show>
         </div>
       </div>
