@@ -59,7 +59,18 @@ const App: Component = () => {
   return (
     <div class="bg-violet-50 w-screen min-h-screen flex justify-center">
       <div class="w-[800px] pt-8 pb-16 px-2">
-        <h1 class="font-black text-4xl mb-8">Sanajuuri ratkaisija</h1>
+        <h1 class="font-black text-4xl">Sanajuuri-ratkaisija</h1>
+        <div class="flex gap-1 mb-8 text-sm">
+          <a class="underline" href="https://github.com/Nikug/sanajuuri-ratkaisija">
+            Github
+          </a>
+          <a class="underline" href="https://www.hs.fi/pelit/art-2000011201869.html">
+            Sanajuuri
+          </a>
+          <a class="underline" href="https://www.kielitoimistonsanakirja.fi/#/">
+            Kielitoimiston sanakirja
+          </a>
+        </div>
         <form onSubmit={handleSolve}>
           <div class="flex flex-col gap-2">
             <div class="flex flex-col gap-1">
