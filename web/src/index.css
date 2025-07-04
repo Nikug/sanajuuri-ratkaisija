@@ -1,0 +1,7 @@
+@import 'tailwindcss';
+
+@layer base {
+  * {
+    @apply border-violet-800 focus:outline focus:outline-violet-600 text-violet-900
+  }
+}
