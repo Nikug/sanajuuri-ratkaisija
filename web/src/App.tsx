@@ -29,8 +29,8 @@ const App: Component = () => {
     setAllCharactersError("");
     setFirstWordError("");
 
-    const word = firstWord();
-    const characters = allCharacters();
+    const word = firstWord().toLowerCase();
+    const characters = allCharacters().toLowerCase();
 
     if (word.length !== 3) {
       setFirstWordError("Tarvitaan 3 kirjainta");
