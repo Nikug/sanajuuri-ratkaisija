@@ -31,7 +31,12 @@ const prettyPrintSolution = (words: string[]): void => {
 
 const listSubtract = (original: string[], sub: string[]): string[] => {
   const copy = [...original];
-  sub.forEach((char) => copy.splice(copy.indexOf(char), 1));
+  sub.forEach((char) => {
+    const index = copy.indexOf(char);
+    if (index !== -1) {
+      copy.splice(index, 1);
+    }
+  });
 
   return copy;
 };
